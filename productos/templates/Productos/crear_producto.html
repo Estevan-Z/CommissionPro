@@ -1,0 +1,24 @@
+<form method="post" id="formCrearProducto" action="{% url 'crear_producto' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+</form>
+<style>
+    form label {
+            display: flex;
+            
+        }
+
+        form input, form select, form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .helptext{
+            display: flex;
+        }
+
+</style>

@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Control de Comisiones{% endblock %}</title>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eef2f7;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #f3df70;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo span {
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav li {
+            margin: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #f1bb07;
+        }
+
+        nav a .material-icons {
+            font-size: 1.2em;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="{% static 'img/logo.png' %}" alt="" style="height: 60px;">
+            <span>Control de Comisiones</span>
+        </div>
+        <ul>
+            <li><a href="/ventas/lista/"><img src="{% static 'Icons/ventas.png' %}" alt="" style="height: 25px;"> Ventas</a></li>
+            <li><a href="/productos/lista/"><img src="{% static 'Icons/productos.png' %}" alt="" style="height: 25px;"> Productos</a></li>
+            <li><a href="/comerciales/lista/"><img src="{% static 'Icons/People.png' %}" alt="" style="height: 25px;"> Comerciales</a></li>
+            <li><a href="/comerciales/crear/"> Crear Comercial</a></li>
+            <li><a href="/ventas/crear/"> Registrar Venta</a></li>
+        </ul>
+    </nav>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>

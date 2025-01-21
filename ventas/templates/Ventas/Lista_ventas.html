@@ -1,0 +1,118 @@
+{% extends "homepage.html" %}
+{% block content %}
+<br><br><br>
+<div class="action-container">
+    <ion-button id="nuevoProducto" class="button">
+        <ion-icon name="add-circle-outline"></ion-icon> Añadir
+    </ion-button>  
+</div>
+
+<div class="table-container">
+    <h1>Lista de Ventas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Comercial</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Comisión Total</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for venta in ventas %}
+            <tr>
+                <td>{{ venta.comercial.nombre }}</td>
+                <td>{{ venta.producto.nombre }}</td>
+                <td>{{ venta.cantidad }}</td>
+                <td>{{ venta.comision_total_en_pesos }}</td>
+                <td>{{ venta.fecha|date:"d/m/Y H:i" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No hay ventas registradas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    <div style="text-align: center;">
+        <a href="/ventas/crear/">Registrar Nueva Venta</a>
+        <br>
+        <a href="/">Volver al Inicio</a>
+    </div>
+    <style>
+        .table-container {
+        max-width: 95%;
+        margin: 20px auto;
+        overflow-x: auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 20px;
+        text-align: left;
+        
+    }
+
+    th, td {
+        padding: 8px;
+    }
+
+    th {
+        background-color: #6aabe7;
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #e8f5e9;
+    }
+
+    .no-data {
+        text-align: center;
+        color: #777;
+        font-style: italic;
+    }
+
+    .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .button:hover {
+        background-color: #388e3c;
+        transform: translateY(-2px);
+    }
+
+    .button i {
+        font-size: 20px;
+    }
+
+    .action-container {
+        text-align: right;
+        margin: 20px;
+    }
+    
+    </style>
+{% endblock %}

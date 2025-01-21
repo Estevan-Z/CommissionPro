@@ -1,0 +1,108 @@
+{% extends "homepage.html" %}
+{% block content %}
+<br><br><br><br><br><br>
+    <h1>Lista de Comerciales</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Zona</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for comercial in comerciales %}
+            <tr>
+                <td>{{ comercial.id }}</td>
+                <td>{{ comercial.nombre }}</td>
+                <td>{{ comercial.email }}</td>
+                <td>{{ comercial.telefono }}</td>
+                <td>{{ comercial.zona }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="no-data">No hay comerciales registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div style="text-align: center;">
+    </div>
+    <style>
+        .table-container {
+            max-width: 90%;
+            margin: 0 auto;
+            overflow-x: auto;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+            text-align: left;
+        }
+    
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+    
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+    
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    
+        tr:hover {
+            background-color: #e0f7fa;
+        }
+    
+        .no-data {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+        }
+    
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            color: white;
+            background-color: #4CAF50;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+        }
+    
+        .button:hover {
+            background-color: #388e3c;
+        }
+    
+        @media screen and (max-width: 768px) {
+            table {
+                font-size: 14px;
+            }
+    
+            th, td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+{% endblock %}
+
+
+
