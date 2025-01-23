@@ -1,15 +1,27 @@
 {% extends "homepage.html" %}
+{% load static %}
 {% block content %}
-<br><br><br><br><br><br>
-    <h1>Lista de Comerciales</h1>
+<link rel="stylesheet" href="{% static 'css/Lista_comerciales.css' %}">
+<script src="{% static 'js/Lista_comerciales.js' %}"></script>
+<br><br><br><br>
+<div class="action-container">
+    <button id="nuevoComercial">
+        <img src="{% static 'Icons/añadiruser.png' %}" alt="Añadir Icono" style="height: 25px;">
+        Añadir
+    </button>
+</div>
+
+<div class="table-container">
+    <h1>Comerciales</h1>
     <table>
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Teléfono</th>
-                <th>Zona</th>
+                <th><img src="{% static 'Icons/codigo.png' %}" alt="" style="height: 25px;"> Codigo</th>
+                <th><img src="{% static 'Icons/Name.png' %}" alt="" style="height: 25px;"> Nombre</th>
+                <th><img src="{% static 'Icons/correo.png' %}" alt="" style="height: 25px;"> Correo</th>
+                <th><img src="{% static 'Icons/movil.png' %}" alt="" style="height: 25px;"> Teléfono</th>
+                <th><img src="{% static 'Icons/zona.png' %}" alt="" style="height: 25px;"> Zona</th>
+                <th><img src="{% static 'Icons/config.png' %}" alt="" style="height: 25px;">Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -20,6 +32,10 @@
                 <td>{{ comercial.email }}</td>
                 <td>{{ comercial.telefono }}</td>
                 <td>{{ comercial.zona }}</td>
+                <td>
+                    <button onclick="editarComercial('{{ comercial.id }}')"><img src="{% static 'Icons/Edit.png' %}" alt="" style="height: 25px;"></button>            
+                    <button onclick="eliminarComercial('{{ comercial.id }}')"> <img src="{% static 'Icons/Eliminar.png' %}" alt="" style="height: 25px;"></button>
+                </td>  
             </tr>
             {% empty %}
             <tr>
@@ -28,80 +44,55 @@
             {% endfor %}
         </tbody>
     </table>
-    <div style="text-align: center;">
-    </div>
-    <style>
-        .table-container {
-            max-width: 90%;
-            margin: 0 auto;
-            overflow-x: auto;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-            padding: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+    <script>
+        document.getElementById("nuevoComercial").addEventListener("click", function () {
+            fetch("{% url 'crear_comercial' %}") 
+                .then(response => response.text())
+                .then(data => {
+                    Swal.fire({
+                        title: 'Registrar Nuevo Comercial',
+                        html: data, 
+                        showCancelButton: true,
+                        confirmButtonText: 'Guardar',
+                        cancelButtonText: 'Cancelar',
+                        focusConfirm: false,
+                        preConfirm: () => {
+                            const form = document.querySelector("form"); 
+                            const formData = new FormData(form);
     
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            font-size: 16px;
-            text-align: left;
-        }
-    
-        th, td {
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-        }
-    
-        th {
-            background-color: #4CAF50;
-            color: white;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-    
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-    
-        tr:hover {
-            background-color: #e0f7fa;
-        }
-    
-        .no-data {
-            text-align: center;
-            color: #999;
-            font-style: italic;
-        }
-    
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            color: white;
-            background-color: #4CAF50;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: background-color 0.3s ease;
-        }
-    
-        .button:hover {
-            background-color: #388e3c;
-        }
-    
-        @media screen and (max-width: 768px) {
-            table {
-                font-size: 14px;
-            }
-    
-            th, td {
-                padding: 8px 10px;
-            }
-        }
-    </style>
+                            return fetch(form.action, {
+                                method: 'POST',
+                                body: formData,
+                                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Error en la solicitud');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                if (data.message) {
+                                    return data.message;
+                                }
+                                throw new Error('Error al procesar el formulario');
+                            })
+                            .catch(error => {
+                                Swal.showValidationMessage(`Error: ${error.message}`);
+                            });
+                        },
+                    }).then(result => {
+                        if (result.isConfirmed) {
+                            Swal.fire('¡Éxito!', result.value, 'success').then(() => {
+                                location.reload(); // Recarga la lista de productos
+                            });
+                        }
+                    });
+                });
+        });
+    </script>
+   
+</div>
 {% endblock %}
 
 

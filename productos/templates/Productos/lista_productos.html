@@ -1,13 +1,16 @@
 {% extends "homepage.html" %}
 {% load static %}
 {% block content %}
-<br><br><br>
-
+<script src="{% static 'js/Lista_productos.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/Lista_productos.css' %}">
+<br><br><br><br>
 <div class="action-container">
-    <button id="nuevoProducto" >
-        <img src="{% static 'Icons/añadir.png' %}" alt="" style="height: 25px;">Añadir
-    </button>  
+    <button id="nuevoProducto">
+        <img src="{% static 'Icons/añadir.png' %}" alt="Añadir Icono" style="height: 25px;">
+        Añadir
+    </button>
 </div>
+
 <div class="table-container">
     <h1>Productos</h1>
     <table>
@@ -30,9 +33,8 @@
                 <td>{{ producto.marca }}</td>
                 <td>{{ producto.comision }}</td>
                 <td>
-                    <button onclick="eliminarProducto('{{ producto.id }}')"> <img src="{% static 'Icons/Eliminar.png' %}" alt="" style="height: 25px;"></button>
-
                     <button onclick="editarProducto('{{ producto.id }}')"><img src="{% static 'Icons/Edit.png' %}" alt="" style="height: 25px;"></button>            
+                    <button onclick="eliminarProducto('{{ producto.id }}')"> <img src="{% static 'Icons/Eliminar.png' %}" alt="" style="height: 25px;"></button>
                 </td>         
             </tr>
             {% empty %}
@@ -43,92 +45,8 @@
         </tbody>
     </table>
 </div>
-
 <script>
-    function getCSRFToken() {
-    const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-        if (cookie.trim().startsWith('csrftoken=')) {
-            return cookie.split('=')[1];
-        }
-    }
-    return '';
-}
-
-function eliminarProducto(id) {
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: '¡No podrás recuperar este producto!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Eliminar',
-        cancelButtonText: 'Cancelar',
-    }).then(result => {
-        if (result.isConfirmed) {
-            fetch(`/productos/eliminar/${id}/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': getCSRFToken(),
-                    'X-Requested-With': 'XMLHttpRequest',
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    Swal.fire('¡Eliminado!', data.message, 'success').then(() => {
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire('Error', data.error || 'No se pudo eliminar el producto.', 'error');
-                }
-            });
-        }
-    });
-}
-
-function editarProducto(id) {
-    fetch(`/productos/editar/${id}/`)
-        .then(response => response.text())
-        .then(data => {
-            Swal.fire({
-                title: 'Editar Producto',
-                html: data,
-                showCancelButton: true,
-                confirmButtonText: 'Guardar',
-                cancelButtonText: 'Cancelar',
-                focusConfirm: false,
-                preConfirm: () => {
-                    const form = document.querySelector("form");
-                    const formData = new FormData(form);
-
-                    return fetch(form.action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRFToken': getCSRFToken(),
-                            'X-Requested-With': 'XMLHttpRequest',
-                        },
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.message) return data.message;
-                        throw new Error('Error al guardar cambios');
-                    })
-                    .catch(error => {
-                        Swal.showValidationMessage(`Error: ${error.message}`);
-                    });
-                },
-            }).then(result => {
-                if (result.isConfirmed) {
-                    Swal.fire('¡Éxito!', 'Producto editado correctamente', 'success').then(() => {
-                        location.reload();
-                    });
-                }
-            });
-        });
-}
-
-document.getElementById("nuevoProducto").addEventListener("click", function () {
+    document.getElementById("nuevoProducto").addEventListener("click", function () {
         fetch("{% url 'crear_producto' %}") 
             .then(response => response.text())
             .then(data => {
@@ -156,7 +74,7 @@ document.getElementById("nuevoProducto").addEventListener("click", function () {
                         })
                         .then(data => {
                             if (data.message) {
-                                return data.message; // Retorna el mensaje de éxito
+                                return data.message;
                             }
                             throw new Error('Error al procesar el formulario');
                         })
@@ -173,85 +91,5 @@ document.getElementById("nuevoProducto").addEventListener("click", function () {
                 });
             });
     });
-
-
 </script>
-
-<style>
-    .table-container {
-        max-width: 95%;
-        margin: 20px auto;
-        overflow-x: auto;
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        text-align: center;
-    }
-
-    
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-        font-size: 20px;
-        text-align: left;
-        
-    }
-
-    th, td {
-        padding: 8px;
-    }
-
-    th {
-        background-color: #000000;
-        color: white;
-    }
-
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-
-    tr:hover {
-        background-color: #e8f5e9;
-    }
-
-    .no-data {
-        text-align: center;
-        color: #777;
-        font-style: italic;
-    }
-
-  
-    .button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 12px 20px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-weight: bold;
-        font-size: 16px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .button:hover {
-        background-color: #388e3c;
-        transform: translateY(-2px);
-    }
-
-    .button i {
-        font-size: 20px;
-    }
-
-    .action-container {
-        text-align: right;
-        margin: 20px;
-    }
-</style>
-
 {% endblock %}

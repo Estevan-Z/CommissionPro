@@ -1,0 +1,110 @@
+.table-container {
+    max-width: 95%;
+    margin: 10px auto;
+    overflow-x: auto;
+    background-color: #fff;
+    padding: 2px;
+    border-radius: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 20px;
+    text-align: left;
+    
+}
+
+th, td {
+    padding: 4px;
+}
+
+th {
+    background-color: #000000;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #e8f5e9;
+}
+
+.no-data {
+    text-align: center;
+    color: #777;
+    font-style: italic;
+}
+
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+    background-color: #388e3c;
+    transform: translateY(-2px);
+}
+
+.button i {
+    font-size: 20px;
+}
+
+.action-container {
+    text-align: right;
+    margin: 20px;
+}
+
+.action-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px; 
+}
+
+#nuevoProducto {
+display: flex;
+align-items: center;
+background-color: #4CAF50; 
+color: white;
+border: none;
+border-radius: 8px;
+padding: 10px 20px;
+font-size: 16px;
+font-family: Arial, sans-serif;
+cursor: pointer;
+transition: background-color 0.3s, box-shadow 0.3s;
+text-align: center;
+gap: 8px; 
+}
+
+#nuevoProducto img {
+vertical-align: middle;
+}
+
+#nuevoProducto:hover {
+background-color: #45a049; 
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+#nuevoProducto:active {
+background-color: #3e8e41; 
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+transform: translateY(2px); 
+}

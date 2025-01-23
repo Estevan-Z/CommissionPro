@@ -21,7 +21,7 @@ def crear_producto(request):
 
 
 def lista_productos(request):
-    productos = Producto.objects.all()
+    productos = Producto.objects.all().order_by('nombre')  
     return render(request, 'Productos/lista_productos.html', {'productos': productos})
 
 
@@ -49,3 +49,8 @@ def editar_producto(request, id):
         return render(request, 'Editar/editar_producto.html', {'form': form, 'producto': producto})
 
     return render(request, 'Editar/editar_producto.html', {'form': form, 'producto': producto})
+
+
+
+
+
