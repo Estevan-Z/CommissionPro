@@ -5,12 +5,27 @@
 <script src="{% static 'js/Lista_comerciales.js' %}"></script>
 <br><br><br><br>
 <div class="action-container">
-    <button id="nuevoComercial">
+    <button class="Boton" id="nuevoComercial">
         <img src="{% static 'Icons/añadiruser.png' %}" alt="Añadir Icono" style="height: 25px;">
         Añadir
     </button>
 </div>
-
+<style>
+    .Boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+</style>
 <div class="table-container">
     <h1>Comerciales</h1>
     <table>
