@@ -1,64 +1,93 @@
 {% extends "homepage.html" %}
 {% block content %}
-<br><br><br>
+{% load custom_filters %}
+
 <div class="action-container">
-    <ion-button id="nuevoProducto" class="button">
-        <ion-icon name="add-circle-outline"></ion-icon> Añadir
-    </ion-button>  
+    <button id="nuevaVenta" class="button"> Añadir
+    </button>  
 </div>
 
-<div class="table-container">
-    <h1>Lista de Ventas</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Comercial</th>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Comisión Total</th>
-                <th>Fecha</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for venta in ventas %}
-            <tr>
-                <td>{{ venta.comercial.nombre }}</td>
-                <td>{{ venta.producto.nombre }}</td>
-                <td>{{ venta.cantidad }}</td>
-                <td>{{ venta.comision_total_en_pesos }}</td>
-                <td>{{ venta.fecha|date:"d/m/Y H:i" }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5">No hay ventas registradas.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-    <div style="text-align: center;">
-        <a href="/ventas/crear/">Registrar Nueva Venta</a>
-        <br>
-        <a href="/">Volver al Inicio</a>
+<div>
+    <h1 class="title">Lista de Ventas</h1>
+    <div class="table-wrapper">
+        {% for comercial, ventas in ventas_por_comercial.items %}
+            <div class="comercial-container">
+                <h2 class="comercial-name">{{ comercial.nombre }}</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Comisión</th>
+                            <th class="fecha">Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto, datos in ventas.items %}
+                        <tr>
+                            <td>{{ producto }}</td>
+                            <td>{{ datos.cantidad }}</td>
+                            <td>{{ datos.comision_total|format_currency }}</td>
+                            <td class="fecha">{{ datos.fecha|date:"d/m/Y h:i A" }}</td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                        <tr class="totales">
+                            <td><strong>Total:</strong></td>
+                            <td></td>
+                            <td><strong>{{ comisiones_totales|get_item:comercial|format_currency }}</strong></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                    
+                </table>
+            </div>
+        {% empty %}
+            <p class="no-data">No hay ventas registradas.</p>
+        {% endfor %}
     </div>
-    <style>
-        .table-container {
-        max-width: 95%;
-        margin: 20px auto;
-        overflow-x: auto;
+</div>
+
+
+<style>
+    
+    .table-wrapper {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); 
+        grid-auto-rows: auto;
+        gap: 20px; 
+        justify-content: center;
+        padding: 0px;
+    }
+
+    .comercial-container {
         background-color: #fff;
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.1);
         text-align: center;
     }
+
+    .comercial-name {
+        font-size: 1.4em;
+        color: #333;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #00B9E8;
+        display: inline-block;
+        padding-bottom: 5px;
+    }
+
+    .fecha {
+        display: none;
+    }
+    
     table {
         width: 100%;
         border-collapse: collapse;
         margin: 20px 0;
-        font-size: 20px;
+        font-size: 18px;
         text-align: left;
-        
     }
 
     th, td {
@@ -66,7 +95,7 @@
     }
 
     th {
-        background-color: #6aabe7;
+        background-color: #000000;
         color: white;
     }
 
@@ -113,6 +142,5 @@
         text-align: right;
         margin: 20px;
     }
-    
-    </style>
+</style>
 {% endblock %}

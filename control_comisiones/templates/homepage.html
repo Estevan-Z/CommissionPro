@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Control de Comisiones{% endblock %}</title>
     <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -14,7 +14,7 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #EDEDED;
+            background-color: #c5c2c2;
         }
 
         nav {
@@ -25,8 +25,6 @@
             color: #EDEDED;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 10px 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             z-index: 1000;
         }
@@ -35,7 +33,6 @@
             display: flex;
             align-items: center;
         }
-      
 
         .logo img {
             height: 40px;
@@ -53,7 +50,7 @@
             margin: 0;
             padding: 0;
             display: flex;
-            gap: 20px;
+            gap: 0px;
         }
 
         nav li {
@@ -77,20 +74,25 @@
             background-color: #00B9E8;
         }
 
-        nav a .material-icons {
-            font-size: 1.2em;
+        
+        .datetime {
+            text-align: center;
+            font-size: 1em;
+            font-weight: bold;
+            line-height: 1.4;
         }
 
-        .container {
-            text-align: center;
+        main {
+            margin-top: 50px; 
             padding: 20px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <nav>
         <div class="logo">
-            <img src="{% static 'img/logo2.png' %}" alt="" style="height: 60px;">
+            <img src="{% static 'img/logo2.png' %}" alt="" style="height: 80px;">
             <span>Control de Comisiones</span>
         </div>
         <ul>
@@ -99,10 +101,31 @@
             <li><a href="/comerciales/lista/"><img src="{% static 'Icons/People.png' %}" alt="" style="height: 25px;"> Comerciales</a></li>
             <li><a href="/ventas/crear/"> Registrar Venta</a></li>
         </ul>
+        
+        <div class="datetime" id="datetime"></div>
     </nav>
     <main>
         {% block content %}
         {% endblock %}
     </main>
+
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const date = now.toLocaleDateString('es-ES', options);
+            const time = now.toLocaleTimeString('es-ES', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit', 
+                hour12: true  
+            });
+    
+            document.getElementById('datetime').innerHTML = `${date} <br> ${time}`;
+        }
+    
+        setInterval(updateDateTime, 1000); 
+        updateDateTime(); 
+    </script>
 </body>
 </html>

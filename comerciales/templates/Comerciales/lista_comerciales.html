@@ -3,7 +3,6 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/Lista_comerciales.css' %}">
 <script src="{% static 'js/Lista_comerciales.js' %}"></script>
-<br><br><br><br>
 <div class="action-container">
     <button class="Boton" id="nuevoComercial">
         <img src="{% static 'Icons/añadiruser.png' %}" alt="Añadir Icono" style="height: 25px;">
@@ -99,7 +98,7 @@
                     }).then(result => {
                         if (result.isConfirmed) {
                             Swal.fire('¡Éxito!', result.value, 'success').then(() => {
-                                location.reload(); // Recarga la lista de productos
+                                location.reload(); 
                             });
                         }
                     });
