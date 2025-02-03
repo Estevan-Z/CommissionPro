@@ -24,7 +24,7 @@ class Producto(models.Model):
         super().save(*args, **kwargs)
 
     def get_precio_en_pesos(self):
-        return f"$ {self.precio:,.2f}"  
+        return f"$ {self.precio:,f}"  
 
     def __str__(self):
         return self.nombre

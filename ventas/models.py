@@ -1,6 +1,7 @@
 from django.db import models
 from comerciales.models import Comercial
 from productos.models import Producto
+
 class Venta(models.Model):
     comercial = models.ForeignKey(Comercial, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)

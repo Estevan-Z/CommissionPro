@@ -1,6 +1,9 @@
 {% extends "homepage.html" %}
 {% load static %}
 {% block content %}
+{% load productos_filters %}
+
+
 <script src="{% static 'js/Lista_productos.js' %}"></script>
 <link rel="stylesheet" href="{% static 'css/Lista_productos.css' %}">
 <div class="action-container">
@@ -30,7 +33,8 @@
                 <td>{{ producto.nombre }}</td>
                 <td>{{ producto.get_precio_en_pesos }}</td>
                 <td>{{ producto.marca }}</td>
-                <td>{{ producto.comision }}</td>
+                <td>{{ producto.comision|formato_porcentaje }}</td>
+
                 <td>
                     <button onclick="editarProducto('{{ producto.id }}')"><img src="{% static 'Icons/Edit.png' %}" alt="" style="height: 25px;"></button>            
                     <button onclick="eliminarProducto('{{ producto.id }}')"> <img src="{% static 'Icons/Eliminar.png' %}" alt="" style="height: 25px;"></button>
