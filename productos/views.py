@@ -1,7 +1,7 @@
-from django.shortcuts import render, get_object_or_404,  redirect
+from django.shortcuts import render, get_object_or_404,  redirect # type: ignore
 from .models import Producto
 from .forms import ProductosForm
-from django.http import JsonResponse
+from django.http import JsonResponse # type: ignore
 
 def crear_producto(request):
     if request.method == 'POST':

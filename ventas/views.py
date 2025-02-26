@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Venta
 from .forms import VentaForm
 from django.utils.timezone import localtime
-
+from django.http import JsonResponse 
 def lista_ventas(request):
     ventas_por_comercial = {}
     comisiones_totales = {}
@@ -40,7 +40,15 @@ def crear_venta(request):
         form = VentaForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('lista_ventas') 
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'message': 'Venta Registrada exitosamente!'})
+            return redirect('lista_ventas')
     else:
         form = VentaForm()
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, 'ventas/crear_venta.html', {'form': form})
+
     return render(request, 'ventas/crear_venta.html', {'form': form})
+
+

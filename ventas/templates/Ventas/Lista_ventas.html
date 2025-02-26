@@ -1,10 +1,14 @@
 {% extends "homepage.html" %}
 {% block content %}
+{% load static %}
 {% load ventas_filters %}
 
+<link rel="stylesheet" href="{% static 'css/Lista_ventas.css' %}">
 <div class="action-container">
-    <button id="nuevaVenta" class="button"> Añadir
-    </button>  
+    <button id="RegisVenta">
+        <img src="{% static 'Icons/añadir.png' %}" alt="Añadir Icono" style="height: 25px;">
+        Añadir
+    </button>
 </div>
 
 <div>
@@ -30,7 +34,7 @@
                             <td>{{ datos.cantidad }}</td>
                             <td>{{ datos.comision_total|format_currency }}</td>
                             <td class="fecha">{{ datos.fecha|date:"d/m/Y h:i A" }}</td>
-                            <td></td>
+                            
                         </tr>
                         {% endfor %}
                         <tr class="totales">
@@ -50,97 +54,51 @@
 </div>
 
 
-<style>
-    
-    .table-wrapper {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr); 
-        grid-auto-rows: auto;
-        gap: 20px; 
-        justify-content: center;
-        padding: 0px;
-    }
+<script>
+    document.getElementById("RegisVenta").addEventListener("click", function () {
+        fetch("{% url 'crear_venta' %}") 
+            .then(response => response.text())
+            .then(data => {
+                Swal.fire({
+                    title: 'Registrar Venta',
+                    html: data, 
+                    showCancelButton: true,
+                    confirmButtonText: 'Guardar',
+                    cancelButtonText: 'Cancelar',
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        const form = document.querySelector("form"); 
+                        const formData = new FormData(form);
 
-    .comercial-container {
-        background-color: #fff;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.1);
-        text-align: center;
-    }
-
-    .comercial-name {
-        font-size: 1.4em;
-        color: #333;
-        margin-bottom: 10px;
-        border-bottom: 2px solid #00B9E8;
-        display: inline-block;
-        padding-bottom: 5px;
-    }
-
-    .fecha {
-        display: none;
-    }
-    
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-        font-size: 18px;
-        text-align: left;
-    }
-
-    th, td {
-        padding: 8px;
-    }
-
-    th {
-        background-color: #000000;
-        color: white;
-    }
-
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-
-    tr:hover {
-        background-color: #e8f5e9;
-    }
-
-    .no-data {
-        text-align: center;
-        color: #777;
-        font-style: italic;
-    }
-
-    .button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 12px 20px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-weight: bold;
-        font-size: 16px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .button:hover {
-        background-color: #388e3c;
-        transform: translateY(-2px);
-    }
-
-    .button i {
-        font-size: 20px;
-    }
-
-    .action-container {
-        text-align: right;
-        margin: 20px;
-    }
-</style>
+                        return fetch(form.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Error en la solicitud');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.message) {
+                                return data.message;
+                            }
+                            throw new Error('Error al procesar el formulario');
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(`Error: ${error.message}`);
+                        });
+                    },
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        Swal.fire('¡Éxito!', result.value, 'success').then(() => {
+                            location.reload(); 
+                        });
+                    }
+                });
+            });
+    });
+</script>
 {% endblock %}
