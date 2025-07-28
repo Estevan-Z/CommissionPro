@@ -1,0 +1,33 @@
+<div class="form-container">
+    <form method="post" id="editForm" action="{% url 'editar_venta' venta_id %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+    </form>
+</div>
+
+<style>
+    .form-container {
+        padding: 20px;
+    }
+    form label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    form input, form select, form textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+    .helptext {
+        font-size: 12px;
+        color: #666;
+        display: block;
+        margin-top: -10px;
+        margin-bottom: 15px;
+    }
+</style>

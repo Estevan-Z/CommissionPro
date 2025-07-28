@@ -23,7 +23,7 @@
                             <th>Producto</th>
                             <th>Cantidad</th>
                             <th>Comisión</th>
-                            <th class="fecha">Fecha</th>
+                            <th>Fecha</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -33,8 +33,15 @@
                             <td>{{ producto }}</td>
                             <td>{{ datos.cantidad }}</td>
                             <td>{{ datos.comision_total|format_currency }}</td>
-                            <td class="fecha">{{ datos.fecha|date:"d/m/Y h:i A" }}</td>
-                            
+                            <td>{{ datos.fecha|date:"d/m/Y" }}</td>
+                            <td class="acciones">
+                                <button class="btn-editar" data-id="{{ datos.id }}">
+                                    <img src="{% static 'Icons/editar.png' %}" alt="Editar" style="height: 20px;">
+                                </button>
+                                <button class="btn-eliminar" data-id="{{ datos.id }}">
+                                    <img src="{% static 'Icons/eliminar.png' %}" alt="Eliminar" style="height: 20px;">
+                                </button>
+                            </td>
                         </tr>
                         {% endfor %}
                         <tr class="totales">
@@ -44,7 +51,6 @@
                             <td></td>
                         </tr>
                     </tbody>
-                    
                 </table>
             </div>
         {% empty %}
@@ -53,8 +59,8 @@
     </div>
 </div>
 
-
 <script>
+    // Función para crear venta (existente)
     document.getElementById("RegisVenta").addEventListener("click", function () {
         fetch("{% url 'crear_venta' %}") 
             .then(response => response.text())
@@ -99,6 +105,116 @@
                     }
                 });
             });
+    });
+
+    // Funciones para editar y eliminar
+    document.querySelectorAll('.btn-editar').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const ventaId = this.getAttribute('data-id');
+        fetch(`/ventas/editar/${ventaId}/`)  // Corregida la URL
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al cargar el formulario');
+                }
+                return response.text();
+            })
+            .then(data => {
+                Swal.fire({
+                    title: 'Editar Venta',
+                    html: data,
+                    showCancelButton: true,
+                    confirmButtonText: 'Actualizar',
+                    cancelButtonText: 'Cancelar',
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        const form = document.querySelector("#editForm");
+                        if (!form) {
+                            Swal.showValidationMessage('No se encontró el formulario');
+                            return false;
+                        }
+                        const formData = new FormData(form);
+
+                        return fetch(form.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+                            },
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Error en la solicitud');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.message) {
+                                return data.message;
+                            }
+                            if (data.errors) {
+                                throw new Error(Object.values(data.errors).join(', '));
+                            }
+                            throw new Error('Error al procesar el formulario');
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(`Error: ${error.message}`);
+                        });
+                    }
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        Swal.fire('¡Éxito!', result.value, 'success').then(() => {
+                            location.reload();
+                        });
+                    }
+                });
+            })
+            .catch(error => {
+                Swal.fire('Error', 'No se pudo cargar el formulario de edición', 'error');
+            });
+    });
+});
+    
+    document.querySelectorAll('.btn-eliminar').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const ventaId = this.getAttribute('data-id');
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminar!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/ventas/eliminar/${ventaId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire(
+                                '¡Eliminado!',
+                                data.message,
+                                'success'
+                            ).then(() => location.reload());
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                data.message,
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
     });
 </script>
 {% endblock %}

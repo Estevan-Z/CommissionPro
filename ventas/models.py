@@ -5,7 +5,7 @@ from productos.models import Producto
 class Venta(models.Model):
     comercial = models.ForeignKey(Comercial, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    fecha = models.DateTimeField(auto_now_add=True)
+    fecha = models.DateTimeField()
     cantidad = models.PositiveIntegerField()
     comision_total = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True)
 
